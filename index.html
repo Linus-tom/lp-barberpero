@@ -10,6 +10,7 @@
     <meta name="keywords" content="sistema para barbearia, agendamento barbearia, software barbearia, gestão barbearia, agenda online barbearia">
     <meta name="author" content="BARBER PRO">
     <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="canonical" href="https://barber.aglabs.ia.br">
     
     <!-- Open Graph -->
@@ -55,303 +56,610 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-T7NC7TTT');</script>
     
+    <!-- Google Fonts - Display font for impact -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
             --primary: #3B82F6;
             --primary-dark: #2563EB;
-            --dark: #0f0e0d;
-            --dark-lighter: #1a1918;
+            --primary-glow: rgba(59, 130, 246, 0.4);
+            --dark: #0a0a0b;
+            --dark-lighter: #111113;
+            --dark-card: #161618;
             --gold: #D4AF37;
             --text: #f5f5f5;
-            --text-muted: #a3a3a3;
+            --text-muted: #9ca3af;
+            --gradient-1: #3B82F6;
+            --gradient-2: #8B5CF6;
+            --gradient-3: #06B6D4;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--dark);
             color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Grain Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.035;
+            pointer-events: none;
+            z-index: 9999;
         }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        .reveal-delay-6 { transition-delay: 0.6s; }
+        
         /* Hero */
         .hero {
-            padding: 80px 0 60px;
+            padding: 100px 0 80px;
             text-align: center;
-            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-lighter) 100%);
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        /* Mesh Gradient Background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.3), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.15), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(6, 182, 212, 0.1), transparent),
+                linear-gradient(180deg, var(--dark) 0%, var(--dark-lighter) 100%);
+            z-index: -1;
+        }
+        
+        /* Animated gradient orbs */
+        .hero-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        .hero-orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-1);
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+        
+        .hero-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-2);
+            bottom: -100px;
+            right: -50px;
+            animation-delay: -7s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
         
         .hero-badge {
-            display: inline-block;
-            background: rgba(59, 130, 246, 0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.1);
             color: var(--primary);
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border-radius: 100px;
             font-size: 14px;
-            margin-bottom: 24px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            font-weight: 500;
+            margin-bottom: 32px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+            animation: badge-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes badge-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); }
+            50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.2); }
         }
         
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
         }
         
-        .hero h1 span { color: var(--primary); }
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2), var(--gradient-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Hero text animation */
+        .hero h1 {
+            animation: hero-text-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        @keyframes hero-text-in {
+            to { opacity: 1; transform: translateY(0); }
+        }
         
         .hero-sub {
-            font-size: 1.2rem;
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
             color: var(--text-muted);
             max-width: 600px;
-            margin: 0 auto 32px;
+            margin: 0 auto 40px;
+            animation: hero-text-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
         
+        /* CTA Button with Glow */
         .cta-primary {
             display: inline-block;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 16px 32px;
-            border-radius: 8px;
+            padding: 18px 40px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
-            transition: background 0.2s;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                        box-shadow 0.3s ease;
+            box-shadow: 0 4px 30px var(--primary-glow);
+            animation: hero-text-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
         
-        .cta-primary:hover { background: var(--primary-dark); }
+        .cta-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 40px var(--primary-glow), 
+                        0 0 60px rgba(59, 130, 246, 0.3);
+        }
+        
+        .cta-primary:hover::before {
+            opacity: 1;
+        }
+        
+        .cta-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
         
         .cta-note {
             display: block;
-            margin-top: 12px;
+            margin-top: 16px;
             color: var(--text-muted);
             font-size: 14px;
+            animation: hero-text-in 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
         
         /* Problema */
         .problem {
-            padding: 60px 0;
+            padding: 100px 0;
             background: var(--dark-lighter);
+            position: relative;
         }
         
         .problem h2 {
             text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 40px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            margin-bottom: 60px;
+            letter-spacing: -0.02em;
         }
         
         .problem-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
         }
         
         .problem-card {
-            background: var(--dark);
-            padding: 24px;
-            border-radius: 12px;
+            background: var(--dark-card);
+            padding: 32px;
+            border-radius: 20px;
             border-left: 4px solid #ef4444;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.4s ease;
+        }
+        
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 0 40px rgba(239, 68, 68, 0.1);
+        }
+        
+        .problem-card:hover::before {
+            opacity: 1;
         }
         
         .problem-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
             color: #ef4444;
+            position: relative;
         }
         
-        .problem-card p { color: var(--text-muted); }
+        .problem-card p { 
+            color: var(--text-muted); 
+            position: relative;
+            line-height: 1.7;
+        }
         
         /* Solução */
         .solution {
-            padding: 80px 0;
+            padding: 120px 0;
+            position: relative;
         }
         
         .solution h2 {
             text-align: center;
-            font-size: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
         
         .solution-sub {
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 48px;
+            margin-bottom: 64px;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            font-size: 1.1rem;
         }
         
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 32px;
         }
         
         .benefit {
             display: flex;
-            gap: 16px;
+            gap: 20px;
+            padding: 28px;
+            border-radius: 20px;
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.4s ease,
+                        border-color 0.4s ease;
+        }
+        
+        .benefit:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2),
+                        0 0 50px rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
         }
         
         .benefit-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(59, 130, 246, 0.15);
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.1));
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 26px;
             flex-shrink: 0;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .benefit:hover .benefit-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         
         .benefit h3 {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+            font-size: 1.15rem;
+            margin-bottom: 6px;
+            font-weight: 600;
         }
         
-        .benefit p { color: var(--text-muted); font-size: 15px; }
+        .benefit p { 
+            color: var(--text-muted); 
+            font-size: 15px; 
+            line-height: 1.6;
+        }
         
         /* Como Funciona */
         .how {
-            padding: 80px 0;
+            padding: 120px 0;
             background: var(--dark-lighter);
+            position: relative;
         }
         
         .how h2 {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 48px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 64px;
+            letter-spacing: -0.02em;
         }
         
         .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Connection line between steps */
+        @media (min-width: 800px) {
+            .steps::before {
+                content: '';
+                position: absolute;
+                top: 24px;
+                left: calc(16.66% + 24px);
+                right: calc(16.66% + 24px);
+                height: 2px;
+                background: linear-gradient(90deg, var(--primary), var(--gradient-2), var(--gradient-3));
+                opacity: 0.3;
+            }
         }
         
         .step {
             text-align: center;
+            position: relative;
         }
         
         .step-number {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--gradient-2));
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            margin: 0 auto 16px;
+            margin: 0 auto 20px;
+            position: relative;
+            box-shadow: 0 4px 20px var(--primary-glow);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        .step h3 { margin-bottom: 8px; }
-        .step p { color: var(--text-muted); font-size: 15px; }
+        .step:hover .step-number {
+            transform: scale(1.15);
+        }
+        
+        .step h3 { 
+            margin-bottom: 10px; 
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .step p { 
+            color: var(--text-muted); 
+            font-size: 15px; 
+            line-height: 1.6;
+        }
         
         /* Social Proof */
         .proof {
-            padding: 80px 0;
+            padding: 120px 0;
+            position: relative;
         }
         
         .proof h2 {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 48px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 64px;
+            letter-spacing: -0.02em;
         }
         
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 40px;
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto 48px;
+            max-width: 700px;
+            margin: 0 auto 64px;
+        }
+        
+        .stat {
+            padding: 32px 20px;
+            background: var(--dark-card);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.4s ease;
+        }
+        
+        .stat:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59, 130, 246, 0.3);
         }
         
         .stat-number {
-            font-size: 2.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
         }
         
-        .stat-label { color: var(--text-muted); }
+        .stat-label { 
+            color: var(--text-muted); 
+            margin-top: 8px;
+            font-size: 15px;
+        }
         
         /* Pricing Preview */
         .pricing-preview {
-            padding: 60px 0;
+            padding: 100px 0;
             background: var(--dark-lighter);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Subtle gradient orb for pricing */
+        .pricing-preview::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        
+        .pricing-preview .container {
+            position: relative;
+            z-index: 1;
         }
         
         .pricing-preview h2 {
-            font-size: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
             margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
         
-        .pricing-preview p {
+        .pricing-preview > .container > p {
             color: var(--text-muted);
-            margin-bottom: 32px;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .price-card {
+            background: var(--dark-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 400px;
+            margin: 0 auto 32px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        box-shadow 0.4s ease;
+        }
+        
+        .price-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3),
+                        0 0 80px rgba(59, 130, 246, 0.15);
         }
         
         .price-highlight {
-            font-size: 3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 4rem);
             font-weight: 700;
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .price-highlight span {
-            font-size: 1rem;
-            color: var(--text-muted);
+            font-size: 1.2rem;
+            -webkit-text-fill-color: var(--text-muted);
         }
         
         .price-note {
             color: var(--text-muted);
-            margin: 16px 0 32px;
-        }
-        
-        /* Final CTA */
-        .final-cta {
-            padding: 80px 0;
-            text-align: center;
-        }
-        
-        .final-cta h2 {
-            font-size: 2rem;
-            margin-bottom: 16px;
-        }
-        
-        .final-cta p {
-            color: var(--text-muted);
-            margin-bottom: 32px;
-        }
-        
-        .guarantee {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 24px;
-            color: var(--text-muted);
-            font-size: 14px;
+            margin: 20px 0 28px;
+            font-size: 15px;
         }
         
         /* FAQ */
         .faq {
-            padding: 60px 0;
-            background: var(--dark-lighter);
+            padding: 100px 0;
+            background: var(--dark);
         }
         
         .faq h2 {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 56px;
+            letter-spacing: -0.02em;
         }
         
         .faq-list {
@@ -360,31 +668,136 @@
         }
         
         .faq-item {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 28px 0;
+            transition: background 0.3s ease;
+        }
+        
+        .faq-item:first-child {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
         
         .faq-item h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
         
-        .faq-item p { color: var(--text-muted); }
+        .faq-item:hover h3 {
+            color: var(--primary);
+        }
+        
+        .faq-item p { 
+            color: var(--text-muted); 
+            line-height: 1.7;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 60% 40% at 50% 100%, rgba(59, 130, 246, 0.2), transparent);
+            z-index: 0;
+        }
+        
+        .final-cta .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .final-cta h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        
+        .final-cta > .container > p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .guarantee {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 28px;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
         
         /* Footer */
         footer {
-            padding: 40px 0;
+            padding: 48px 0;
             text-align: center;
             color: var(--text-muted);
             font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        footer a { color: var(--primary); text-decoration: none; }
+        footer a { 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            transition: color 0.3s ease;
+        }
         
+        footer a:hover {
+            color: var(--primary);
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero { padding: 60px 0 40px; }
-            .hero h1 { font-size: 1.8rem; }
-            .cta-primary { width: 100%; text-align: center; }
+            .hero { 
+                padding: 80px 0 60px; 
+                min-height: auto;
+            }
+            .hero h1 { font-size: 2.2rem; }
+            .cta-primary { 
+                width: 100%; 
+                text-align: center; 
+                padding: 16px 32px;
+            }
+            .benefits-grid,
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+            .steps::before {
+                display: none;
+            }
+            .price-card {
+                padding: 36px 28px;
+            }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html {
+                scroll-behavior: auto;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -395,29 +808,33 @@
 
     <!-- Hero -->
     <section class="hero">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
         <div class="container">
-            <span class="hero-badge">✂️ Sistema #1 para Barbearias</span>
-            <h1>Pare de perder clientes<br>por <span>agenda bagunçada</span></h1>
-            <p class="hero-sub">Sistema de agendamento online com confirmação automática por WhatsApp. Seus clientes agendam sozinhos, 24h por dia.</p>
-            <a href="#pricing" class="cta-primary" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'hero'});">Começar Teste Grátis</a>
-            <span class="cta-note">14 dias grátis • Sem cartão de crédito</span>
+            <div class="hero-content">
+                <span class="hero-badge">✂️ Sistema #1 para Barbearias</span>
+                <h1>Pare de perder clientes<br>por <span>agenda bagunçada</span></h1>
+                <p class="hero-sub">Sistema de agendamento online com confirmação automática por WhatsApp. Seus clientes agendam sozinhos, 24h por dia.</p>
+                <a href="#pricing" class="cta-primary" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'hero'});">Começar Teste Grátis</a>
+                <span class="cta-note">14 dias grátis • Sem cartão de crédito</span>
+            </div>
         </div>
     </section>
 
     <!-- Problema -->
     <section class="problem">
         <div class="container">
-            <h2>Isso acontece na sua barbearia?</h2>
+            <h2 class="reveal">Isso acontece na sua barbearia?</h2>
             <div class="problem-grid">
-                <div class="problem-card">
+                <div class="problem-card reveal reveal-delay-1">
                     <h3>📞 Telefone não para</h3>
                     <p>Você atende cliente enquanto responde WhatsApp e ainda tenta cortar cabelo. Resultado: ninguém fica satisfeito.</p>
                 </div>
-                <div class="problem-card">
+                <div class="problem-card reveal reveal-delay-2">
                     <h3>😤 Clientes não aparecem</h3>
                     <p>Reservou o horário mas não veio. Você perdeu tempo e dinheiro. No fim do mês, são milhares em faturamento perdido.</p>
                 </div>
-                <div class="problem-card">
+                <div class="problem-card reveal reveal-delay-3">
                     <h3>📋 Agenda no papel</h3>
                     <p>Rasuras, horários duplicados, confusão. Você fica refém de um caderno que pode sumir ou molhar a qualquer momento.</p>
                 </div>
@@ -428,45 +845,45 @@
     <!-- Solução -->
     <section class="solution">
         <div class="container">
-            <h2>BARBER PRO resolve isso</h2>
-            <p class="solution-sub">Sistema completo de gestão para barbearias. Simples de usar, poderoso nos resultados.</p>
+            <h2 class="reveal">BARBER PRO resolve isso</h2>
+            <p class="solution-sub reveal reveal-delay-1">Sistema completo de gestão para barbearias. Simples de usar, poderoso nos resultados.</p>
             <div class="benefits-grid">
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-1">
                     <div class="benefit-icon">📱</div>
                     <div>
                         <h3>Agendamento Online 24h</h3>
                         <p>Seus clientes agendam pelo celular a qualquer hora. Você acorda com a agenda cheia.</p>
                     </div>
                 </div>
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-2">
                     <div class="benefit-icon">💬</div>
                     <div>
                         <h3>Confirmação por WhatsApp</h3>
                         <p>Lembrete automático 24h antes. Reduza faltas em até 70% sem fazer nada.</p>
                     </div>
                 </div>
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-3">
                     <div class="benefit-icon">👥</div>
                     <div>
                         <h3>Gestão de Equipe</h3>
                         <p>Cada barbeiro com sua agenda. Comissões calculadas automaticamente.</p>
                     </div>
                 </div>
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-4">
                     <div class="benefit-icon">💰</div>
                     <div>
                         <h3>Controle Financeiro</h3>
                         <p>Saiba quanto entrou, quanto saiu e quanto cada serviço fatura. Decisões com dados, não achismo.</p>
                     </div>
                 </div>
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-5">
                     <div class="benefit-icon">📊</div>
                     <div>
                         <h3>Relatórios Simples</h3>
                         <p>Veja os números que importam: clientes novos, recorrentes, serviços mais pedidos.</p>
                     </div>
                 </div>
-                <div class="benefit">
+                <div class="benefit reveal reveal-delay-6">
                     <div class="benefit-icon">🔗</div>
                     <div>
                         <h3>Link Exclusivo</h3>
@@ -480,19 +897,19 @@
     <!-- Como Funciona -->
     <section class="how">
         <div class="container">
-            <h2>Comece em 3 passos</h2>
+            <h2 class="reveal">Comece em 3 passos</h2>
             <div class="steps">
-                <div class="step">
+                <div class="step reveal reveal-delay-1">
                     <div class="step-number">1</div>
                     <h3>Crie sua conta</h3>
                     <p>2 minutos. Só precisa de email e nome da barbearia.</p>
                 </div>
-                <div class="step">
+                <div class="step reveal reveal-delay-2">
                     <div class="step-number">2</div>
                     <h3>Configure seus serviços</h3>
                     <p>Adicione cortes, barba, combos. Defina preços e duração.</p>
                 </div>
-                <div class="step">
+                <div class="step reveal reveal-delay-3">
                     <div class="step-number">3</div>
                     <h3>Compartilhe o link</h3>
                     <p>Coloque no Instagram, WhatsApp, cartão. Clientes agendam sozinhos.</p>
@@ -504,18 +921,18 @@
     <!-- Social Proof -->
     <section class="proof">
         <div class="container">
-            <h2>Números que importam</h2>
+            <h2 class="reveal">Números que importam</h2>
             <div class="stats">
-                <div>
-                    <div class="stat-number">70%</div>
-                    <div class="stat-label">menos faltas</div>
+                <div class="stat reveal reveal-delay-1">
+                    <div class="stat-number" data-count="70">0</div>
+                    <div class="stat-label">% menos faltas</div>
                 </div>
-                <div>
-                    <div class="stat-number">3h</div>
-                    <div class="stat-label">economizadas/semana</div>
+                <div class="stat reveal reveal-delay-2">
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-label">h economizadas/semana</div>
                 </div>
-                <div>
-                    <div class="stat-number">24/7</div>
+                <div class="stat reveal reveal-delay-3">
+                    <div class="stat-number" data-text="24/7">24/7</div>
                     <div class="stat-label">agendamentos</div>
                 </div>
             </div>
@@ -525,36 +942,38 @@
     <!-- Pricing Preview -->
     <section class="pricing-preview" id="pricing">
         <div class="container">
-            <h2>Simples e sem surpresas</h2>
-            <p>Comece grátis. Pague só quando fizer sentido.</p>
-            <div class="price-highlight">R$ 49<span>/mês</span></div>
-            <p class="price-note">Plano completo • Todos os recursos • Suporte incluso</p>
-            <a href="https://barber.aglabs.ia.br/signup" class="cta-primary" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'pricing'});">Começar 14 Dias Grátis</a>
+            <h2 class="reveal">Simples e sem surpresas</h2>
+            <p class="reveal reveal-delay-1">Comece grátis. Pague só quando fizer sentido.</p>
+            <div class="price-card reveal reveal-delay-2">
+                <div class="price-highlight">R$ 49<span>/mês</span></div>
+                <p class="price-note">Plano completo • Todos os recursos • Suporte incluso</p>
+                <a href="https://barber.aglabs.ia.br/planos" class="cta-primary" style="animation: none; opacity: 1; transform: none;" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'pricing'});">Começar 14 Dias Grátis</a>
+            </div>
         </div>
     </section>
 
     <!-- FAQ -->
     <section class="faq">
         <div class="container">
-            <h2>Perguntas Frequentes</h2>
+            <h2 class="reveal">Perguntas Frequentes</h2>
             <div class="faq-list">
-                <div class="faq-item">
+                <div class="faq-item reveal reveal-delay-1">
                     <h3>Preciso instalar alguma coisa?</h3>
                     <p>Não. BARBER PRO funciona 100% no navegador, celular ou computador. Nada pra baixar.</p>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item reveal reveal-delay-2">
                     <h3>Meus clientes vão saber usar?</h3>
                     <p>Sim. É mais fácil que pedir comida por app. Eles escolhem o serviço, o barbeiro e o horário. Pronto.</p>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item reveal reveal-delay-3">
                     <h3>E se eu não gostar?</h3>
                     <p>Cancela quando quiser. Sem multa, sem burocracia. Os 14 dias são grátis de verdade.</p>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item reveal reveal-delay-4">
                     <h3>Funciona pra barbearia pequena?</h3>
                     <p>Funciona pra 1 cadeira ou 20. O sistema se adapta ao seu tamanho.</p>
                 </div>
-                <div class="faq-item">
+                <div class="faq-item reveal reveal-delay-5">
                     <h3>Como funciona o lembrete por WhatsApp?</h3>
                     <p>O sistema envia mensagem automática 24h antes do horário. Cliente confirma ou cancela com um clique.</p>
                 </div>
@@ -565,10 +984,10 @@
     <!-- Final CTA -->
     <section class="final-cta">
         <div class="container">
-            <h2>Pronto pra parar de perder clientes?</h2>
-            <p>Configure em 5 minutos. Veja resultado na primeira semana.</p>
-            <a href="https://barber.aglabs.ia.br/signup" class="cta-primary" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'final'});">Começar Teste Grátis Agora</a>
-            <div class="guarantee">🔒 14 dias grátis • Cancele quando quiser • Sem cartão</div>
+            <h2 class="reveal">Pronto pra parar de perder clientes?</h2>
+            <p class="reveal reveal-delay-1">Configure em 5 minutos. Veja resultado na primeira semana.</p>
+            <a href="https://barber.aglabs.ia.br/planos" class="cta-primary reveal reveal-delay-2" style="animation: none; opacity: 0; transform: translateY(40px);" onclick="dataLayer.push({'event': 'cta_click', 'cta_location': 'final'});">Começar Teste Grátis Agora</a>
+            <div class="guarantee reveal reveal-delay-3">🔒 14 dias grátis • Cancele quando quiser • Sem cartão</div>
         </div>
     </section>
 
@@ -576,13 +995,61 @@
     <footer>
         <div class="container">
             <p>© 2026 BARBER PRO. Todos os direitos reservados.</p>
-            <p style="margin-top: 8px;">
-                <a href="/termos">Termos de Uso</a> • 
-                <a href="/privacidade">Política de Privacidade</a> • 
-                <a href="/contato">Contato</a>
+            <p style="margin-top: 12px;">
+                <a href="https://barber.aglabs.ia.br/termos">Termos de Uso</a> • 
+                <a href="https://barber.aglabs.ia.br/privacidade">Política de Privacidade</a> • 
+                <a href="https://barber.aglabs.ia.br/contato">Contato</a>
             </p>
         </div>
     </footer>
+
+    <!-- Scroll Reveal + Counter Animation -->
+    <script>
+        // Intersection Observer for scroll reveal
+        document.addEventListener('DOMContentLoaded', function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        
+                        // Trigger counter animation for stats
+                        const counter = entry.target.querySelector('[data-count]');
+                        if (counter && !counter.dataset.animated) {
+                            animateCounter(counter);
+                            counter.dataset.animated = 'true';
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            reveals.forEach(el => observer.observe(el));
+            
+            // Counter animation function
+            function animateCounter(el) {
+                const target = parseInt(el.dataset.count);
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        el.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        el.textContent = Math.floor(current);
+                    }
+                }, 16);
+            }
+        });
+    </script>
 
 </body>
 </html>
